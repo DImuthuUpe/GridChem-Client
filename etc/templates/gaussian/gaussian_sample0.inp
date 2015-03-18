@@ -1,0 +1,13 @@
+%chk=water.chk
+%nprocshared=1
+%mem=500MB
+#P RHF/6-31g* opt pop=reg gfinput gfprint iop(6/7=3) SCF=direct 
+ 
+Gaussian Test Job 00
+Water with archiving
+ 
+0 1
+O
+H 1 0.96
+H 1 0.96 2 109.471221
+

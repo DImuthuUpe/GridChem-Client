@@ -1,0 +1,4 @@
+# EACL CERN CA
+access_id_CA            X509            '/C=CH/O=CERN/OU=cern.ch/CN=CERN CA'
+pos_rights              globus  CA:sign
+cond_subjects           globus  '"/C=ch/O=CERN/*" "/C=CH/O=CERN/*" "/C=ch/O=CERN/OU=cern.ch/*" "/C=CH/O=CERN/OU=cern.ch/*" "/O=Grid/O=CERN/*" "/O=CERN/O=Grid/"'

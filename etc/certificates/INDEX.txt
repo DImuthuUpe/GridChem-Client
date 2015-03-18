@@ -1,0 +1,40 @@
+#
+#Hash		Source						Email
+#
+01621954	United Kingdom - UK e-Science (New UK CA)	ca-operator@grid-support.ac.uk
+0ed6468a	United Kingdom - GridPP				ca@hep.grid.ac.uk
+16da7552	Netherlands - NIKHEF				David Groep ca@nikhef.nl
+1aa81ac1	Slovak CA http://ups.savba.sk/ca		?
+1c3f2ca8	US - DOE Grids					DOEGrids-CA-1@doegrids.org
+1e43b9cc	Ireland - Grid-Ireland				Brian Coghlan grid-ireland-ca@cs.tcd.ie
+1f0e8352	Nordic countries - NorduGrid			Anders Waananen ca@nbi.dk
+225860ae	Dutch Grid					?
+29021213	Fermilab PKI CA					nightwatch@fnal.gov
+34a509c3	CNRS-Projets					?
+41380387	Portugal - LIP					Jorge Gomes ca@lip.pt
+42864e48	Globus						ca@globus.org
+49f18420	Italy - INFN					infn-ca@fi.infn.it
+4a6cd8b1	NCSA (New)					?
+5aba75cb	NCSA (Old)					?
+5f54f417	Canada - GridCanada				ca@gridcanada.ca
+6349a761	US - DOE Root					?
+6b4ddd18	Datagrid-fr					?
+6df70cb1	Germany - GermanGrid				Ursula Epting FZK-Grid-CA@hik.fzk.de
+7a15b590.0	Fermilab PKI CA					nightwatch@fnal.gov
+84c1f123	Cyprus - CyGrid					Wei Xing cygrid-ca@ucy.ac.cy
+8a661490	Poland - PolishGrid				Pawel Wolniewicz plgrid-ca@man.poznan.pl
+90e2484f	Spain - DATAGRID-ES				Rafael Marco datagrid-es-ca@ifca.unican.es
+9d8753eb	US - DOE Sub					?
+a7792cdb	NPACI (Old)					?
+b2cb8d2c	NASA (Old)					?
+b89793e4	NPACI (Current)					?
+bc82f877	NASA (Current)					?
+bc870044	CERN						mathias.gug@cern.ch,cern-globus-ca@cern.ch
+c35c1972	CERN http://globus.home.cern.ch			?
+cf4ba8c8	France - CNRS (EDG Catch-all CA)		Sophie.Nicoud@urec.cnrs.fr
+e1fce4e9	Fermilab PKI CA					nightwatch@fnal.gov
+d1b603c3	US - ESnet Root					ESnet-Root-CA-1@es.net
+d64ccb53	Russia - Russian DataGRID			ca@lhc.sinp.msu.ru
+df312a4e	INFN						?
+ed99a497	Czech Rep. - CESNET				Milan Sova ca@cesnet.cz
+ede78092	Greece - HellasGrid				Christos Kanellopoulos hellasgrid-ca@physics.auth.gr

@@ -1,0 +1,5 @@
+(Use 1 processor!) Very simple bond minimization with a water molecule
+ &cntrl
+  imin = 1, maxcyc=200,
+  ntb=0, cut = 30.0,  ntpr = 5,
+/ 

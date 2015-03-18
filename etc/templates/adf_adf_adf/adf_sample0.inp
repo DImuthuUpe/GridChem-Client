@@ -1,0 +1,18 @@
+Title Water Opt
+
+Atoms
+   O   0.0     0.0        0.0
+   H   0.0    -0.68944   -0.578509
+   H   0.0     0.689440  -0.578509
+End
+
+Basis
+  Type TZP
+  Core Small
+End
+
+Geometry
+  Optim Deloc
+End
+
+End Input

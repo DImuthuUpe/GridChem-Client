@@ -1,0 +1,4 @@
+# EACL UK CA 
+access_id_CA	X509   '/O=Grid/O=UKHEP/CN=UK HEP Testbed CA'
+pos_rights	globus	CA:sign
+cond_subjects	globus	'"/O=Grid/O=UKHEP/*"'

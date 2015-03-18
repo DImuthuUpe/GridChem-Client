@@ -1,0 +1,9 @@
+#------------------------------------------------------------------------
+#  token type  | def.authority |                value              
+#--------------|---------------|-----------------------------------------
+# EACL entry #1|
+access_id_CA         X509       '/C=US/ST=Illinois/O=Fermilab/CN=Fermilab Root CA/Email=nightwatch@fnal.gov'
+pos_rights          globus      CA:sign
+cond_subjects       globus      '"/C=US/ST=Illinois/O=Fermilab/*" "/C=US/ST=Illinois/L=Batavia/O=Fermilab/*"'
+
+# end of EACL

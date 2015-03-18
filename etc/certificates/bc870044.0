@@ -1,0 +1,46 @@
+Certificate:
+    Data:
+        Version: 1 (0x0)
+        Serial Number: 0 (0x0)
+        Signature Algorithm: md5WithRSAEncryption
+        Issuer: C=CH, O=CERN, OU=cern.ch, CN=CERN CA
+        Validity
+            Not Before: Mar 25 10:51:31 2002 GMT
+            Not After : Nov 30 12:00:00 2003 GMT
+        Subject: C=CH, O=CERN, OU=cern.ch, CN=CERN CA
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+            RSA Public Key: (1024 bit)
+                Modulus (1024 bit):
+                    00:c9:b4:05:61:7b:a8:ae:37:10:9c:de:27:b5:a3:
+                    71:17:77:8c:ea:b3:3c:d4:3a:04:ee:af:6b:27:e4:
+                    36:92:86:3b:59:36:2c:10:4c:1e:8b:44:50:50:4a:
+                    8a:f6:46:93:ff:1d:34:b8:34:b1:36:5f:82:88:78:
+                    6b:61:ef:17:fe:92:25:0c:bc:64:d4:79:b3:58:1b:
+                    2b:14:68:d3:e9:b1:d0:a3:6e:d6:e6:ff:19:db:c7:
+                    66:ea:a4:e1:53:88:3f:67:d3:9f:d8:b4:65:57:6d:
+                    ae:10:53:81:9e:69:f1:43:28:89:19:0e:a1:78:ab:
+                    82:84:2f:eb:da:2c:dc:25:85
+                Exponent: 65537 (0x10001)
+    Signature Algorithm: md5WithRSAEncryption
+        93:95:82:88:8f:38:b9:3c:2d:49:f1:1f:61:36:e0:71:2c:86:
+        77:66:1b:1d:89:cb:04:d0:5e:7f:6c:3a:51:87:fb:45:07:29:
+        6f:29:36:64:3d:dd:9e:b2:3d:64:e4:a4:48:d3:a9:8a:0d:7d:
+        59:e4:34:af:1c:1b:13:94:c9:12:d8:df:dc:14:a5:91:80:47:
+        b7:2a:28:c4:6b:30:0d:3a:f5:c2:b3:ee:d0:a9:36:c2:8f:41:
+        31:18:88:ec:7d:f9:a1:38:dc:df:23:f1:ab:6b:91:5d:58:f8:
+        39:c0:6e:07:e1:cb:88:dc:f7:1f:6c:81:76:f5:46:e8:0f:58:
+        6c:ee
+-----BEGIN CERTIFICATE-----
+MIIB7zCCAVgCAQAwDQYJKoZIhvcNAQEEBQAwQDELMAkGA1UEBhMCQ0gxDTALBgNV
+BAoTBENFUk4xEDAOBgNVBAsTB2Nlcm4uY2gxEDAOBgNVBAMTB0NFUk4gQ0EwHhcN
+MDIwMzI1MTA1MTMxWhcNMDMxMTMwMTIwMDAwWjBAMQswCQYDVQQGEwJDSDENMAsG
+A1UEChMEQ0VSTjEQMA4GA1UECxMHY2Vybi5jaDEQMA4GA1UEAxMHQ0VSTiBDQTCB
+nzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAybQFYXuorjcQnN4ntaNxF3eM6rM8
+1DoE7q9rJ+Q2koY7WTYsEEwei0RQUEqK9kaT/x00uDSxNl+CiHhrYe8X/pIlDLxk
+1HmzWBsrFGjT6bHQo27W5v8Z28dm6qThU4g/Z9Of2LRlV22uEFOBnmnxQyiJGQ6h
+eKuChC/r2izcJYUCAwEAATANBgkqhkiG9w0BAQQFAAOBgQCTlYKIjzi5PC1J8R9h
+NuBxLIZ3ZhsdicsE0F5/bDpRh/tFBylvKTZkPd2esj1k5KRI06mKDX1Z5DSvHBsT
+lMkS2N/cFKWRgEe3KijEazANOvXCs+7QqTbCj0ExGIjsffmhONzfI/Gra5FdWPg5
+wG4H4cuI3PcfbIF29UboD1hs7g==
+-----END CERTIFICATE-----

@@ -1,0 +1,57 @@
+# $Id: grid-security.conf.1c3f2ca8,v 1.1 2005/07/07 15:22:55 dooley Exp $
+#################################################################
+#
+# File: grid-security.conf
+#
+# Purpose: This file contains the configuration information
+#          for the Grid Security Infrastructure
+#
+#################################################################
+
+# These values are set by globus-setup
+SETUP_GSI_HOST_BASE_DN="OU=Services,DC=doegrids,DC=org"
+SETUP_GSI_USER_BASE_DN="OU=People,DC=doegrids,DC=org"
+SETUP_GSI_CA_NAME="DOEGrids CA 1"
+SETUP_GSI_CA_EMAIL_ADDR="DOEGrids-CA-1@doegrids.org"
+
+_domain=`${bindir}/globus-domainname`
+DEFAULT_GSI_HOST_BASE_DN="o=Globus, o=Grid"
+DEFAULT_GSI_USER_BASE_DN="ou=${_domain}, o=Globus, o=Grid"
+DEFAULT_GSI_CA_NAME="Globus CA"
+DEFAULT_GSI_CA_EMAIL_ADDR="ca@globus.org"
+
+# Distinguish Name (DN) of the Host
+GSI_HOST_BASE_DN="${SETUP_GSI_HOST_BASE_DN:-${DEFAULT_GSI_HOST_BASE_DN}}"
+
+# Distinguish Name (DN) of the User
+GSI_USER_BASE_DN="${SETUP_GSI_USER_BASE_DN:-${DEFAULT_GSI_USER_BASE_DN}}"
+
+# CA Name for the organization
+GSI_CA_NAME="${SETUP_GSI_CA_NAME:-${DEFAULT_GSI_CA_NAME}}"
+
+# CA Email address for the organization
+GSI_CA_EMAIL_ADDR="${SETUP_GSI_CA_EMAIL_ADDR:-${DEFAULT_GSI_CA_EMAIL_ADDR}}"
+
+export GSI_HOST_BASE_DN
+export GSI_USER_BASE_DN
+export GSI_CA_NAME
+export GSI_CA_EMAIL_ADDR
+
+
+
+# $Log: grid-security.conf.1c3f2ca8,v $
+# Revision 1.1  2005/07/07 15:22:55  dooley
+# added bundle of CA signing policies to the /etc directory so myproxy would work for most people right off the bat. We still need TACC and UKy's policies added in.  Tinkered with the myproxy control flow, exception handling, and logic so that it now uses a properties file and searches the user's environment for the needed files.  It should be much more stable now.  Next up, solidifying the file browser.
+#
+# Revision 1.1  2003/05/13 20:05:36  helm
+# move support files to hash name
+#
+# Revision 1.3  2003/05/09 22:17:40  helm
+# capitalization
+#
+# Revision 1.2  2003/05/03 01:18:09  dhiva
+# $Id: grid-security.conf.1c3f2ca8,v 1.1 2005/07/07 15:22:55 dooley Exp $ included for all these files
+#
+# Revision 1.1  2003/05/03 01:15:06  dhiva
+# Globus Support Files for pki1.doegrids.org CA
+#

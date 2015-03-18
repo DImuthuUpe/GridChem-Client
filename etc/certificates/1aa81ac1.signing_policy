@@ -1,0 +1,4 @@
+# EACL Slovak CA
+access_id_CA	X509		'/C=SK/O=IISAS/CN=IISAS CA'
+pos_rights		globus	CA:sign 
+cond_subjects   	globus	'"/C=SK/*"'

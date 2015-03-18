@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="http://www.mcc.uiuc.edu/qmc/schema/molecu.xsd"> 
+  <project id="H2O.GTO" series="0>" 
+<application name="qmcapp" role="molecu" class="serial" version="0.2"> 
+QMC of H2O molecule using Slater-type Orbitals by Aung, Pitzer and Chan,
+JCP 49 2071 (1968) of wavefunction II.  See JCP, 77, 5593 (1982). 
+ </application> 
+ <random parallel="true" seed="-1"/> 
+</project>
+ 
+  <include href="H2O.GamesXml.xml"/> 
+ <wavefunction name="psi0" target="e"> 
+ <!-- add correlation functions --> 
+ <jastrow name="Jee" type="Two-Body" function="pade"> 
+ <distancetable source="e" target="e"/> 
+ <correlation speciesA="e" speciesB="e"> 
+<parameter id="juu_a" name="A">-0.5</parameter> 
+<parameter id="juu_b" name="B">2.60015</parameter> 
+</correlation>
+</jastrow> 
+
+                           </wavefunction> 
+<hamiltonian name="h0" type="generic" target="e"> 
+ <pairpot name="ElecElec" type="coulomb" source="e" target="e"/> 
+<pairpot name="Coulomb" type="coulomb" source="i" target="e"/> 
+ <constant name="IonIon" type="coulomb" source="i" target="i"/> 
+</hamiltonian> 
+<qmc method="vmc"> 
+ <parameter name="blocks">100</parameter> 
+<parameter name="steps">100</parameter>  
+<parameter name="walkers">20</parameter> 
+<parameter name="timestep">0.01</parameter> 
+</qmc> 
+<qmc method="vmc"> 
+ <parameter name="blocks">500</parameter>
+ <parameter name="steps">100</parameter> 
+<parameter name="timestep">0.01</parameter> 
+ </qmc> 
+<qmc method="dmc-ptcl"> 
+ <parameter name="num_gen">30</parameter> 
+ <parameter name="target_walkers">200</parameter> 
+ <parameter name="blocks">500</parameter> 
+ <parameter name="steps">200</parameter> 
+ <parameter name="timestep">1.0e-3</parameter> 
+ </qmc> 
+ 
+                      
+

@@ -1,0 +1,940 @@
+<?xml version='1.0'?>
+<project name="GridChem" default="build">
+
+<!-- *******************************************
+     *        Variable Declarations            *
+     ******************************************* -->
+	
+    <property name="source.dir" value="src" />
+    <property name="build.dir" value="build" />
+    <property name="lib.dir"    value="lib" />
+    <property name="log.dir"    value="log" />
+    <property name="data.dir"   value="etc" />
+    <property name="jar.dir"    value="bin" />
+    <property name="jogl.dir"    value="${lib.dir}${file.separator}jogl" />					<!-- added by Narendra Kumar -->
+    <property name="schema.dir"    value="schema" />
+    <property file="${data.dir}/gridchem.build.properties"/>
+    <property name="jar.name"	value="${jar.base.name}-${jar.version.number}.jar" />
+    <property name="run.class"  value="org.gridchem.client.GridChem" />
+    <property name="query.class" value="org.gridchem.client.util.query.Query" />
+    <property name="webstart.dir"   value="${basedir}/webstart" />
+    <property name="test-reports.dir" value="test-reports"/>
+    <property location="testout" name="test.out.dir"/>
+    <property name="junit.haltonfailure" value="true"/>		 
+    <property name="xms" value="-Xms256m"/>
+    <property name="xmx" value="-Xmx1024m"/>
+
+	<!-- jogl jar path for windows os -->
+	<condition property="jogl.jar.path" value="${jogl.dir}${file.separator}jogl_win">
+	    <os family="windows"/>
+	</condition>
+	
+	<!--<condition property="jogl.jar.path" value="${jogl.dir}${file.separator}jogl_windows">
+		<isset property="isWin64" />
+	</condition>-->
+
+	<!-- native library (dll) path for windows 32 bit os -->
+	<condition property="jogl.lib.path" value="${jogl.dir}${file.separator}jogl_win">
+			<os family="windows" arch="x86" />
+	</condition>
+	
+	<!-- native library (dll) path for windows 64 bit os -->
+	<!--<condition property="jogl.lib.path" value="${jogl.dir}${file.separator}jogl_windows${file.separator}jogl_lib_win64">
+			<os family="windows" arch="amd64" />
+	</condition>-->
+	
+	
+	<!-- jogl jar path for mac ppc os -->
+	<condition property="jogl.jar.path" value="${jogl.dir}${file.separator}jogl_mac_083011">
+	    <os family="mac" arch="ppc" />
+	</condition>
+	
+	<!-- native library (dll) path for mac ppc os -->
+	<condition property="jogl.lib.path" value="${jogl.dir}${file.separator}jogl_mac_083011">
+		<os family="mac" arch="ppc" />
+	</condition>
+
+	<!-- jogl jar path for mac universal os -->
+	<condition property="isMacUniversal">		
+		<and>
+			<os family="mac" />
+			<not>
+				<os arch="ppc" />
+			</not>
+		</and>
+	</condition>
+
+	<!-- setting jogl jar path for mac universal os -->
+	<!--<condition property="jogl.jar.path" value="${jogl.dir}${file.separator}jogl_mac_universal">-->
+	<condition property="jogl.jar.path" value="${jogl.dir}${file.separator}jogl_mac_083011">
+		<isset property="isMacUniversal"/>
+	</condition>
+	
+	<!-- setting jogl lib path for mac universal os -->
+	<!--<condition property="jogl.lib.path" value="${jogl.dir}${file.separator}jogl_mac_universal">-->
+	<condition property="jogl.lib.path" value="${jogl.dir}${file.separator}jogl_mac_083011">
+		<isset property="isMacUniversal"/>
+	</condition>
+	
+	<!-- jogl jar & lib path for unix/linux 64 bit os -->
+	<!--<condition property="isLinux64">
+		<and>
+	    	<os family="unix" arch="amd64"/>
+			<not>
+				<os family="sunos" />
+			</not>
+		</and>
+	</condition>-->
+	
+	<!-- setting jogl jar path for linux 64 bit os -->
+	<!--<condition property="jogl.jar.path" value="${jogl.dir}${file.separator}jogl_linux_64">
+		<isset property="isLinux64" />
+	</condition>-->
+
+	<!-- setting jogl lib path for linux 64 bit os -->
+	<!--<condition property="jogl.lib.path" value="${jogl.dir}${file.separator}jogl_linux_64">
+		<isset property="isLinux64" />
+	</condition>-->	
+
+	
+	<!-- jogl jar & lib path for unix/linux 32 bit os -->
+	<condition property="isLinux32">
+		<and>
+	    	<os family="unix"/>
+			<or>
+				<os arch="i386" />
+				<os arch="i586" />
+			</or>
+			<not>
+				<os family="sunos" />
+			</not>
+		</and>
+	</condition>
+	
+	<!-- setting jogl jar path for linux 32 bit os -->
+	<condition property="jogl.jar.path" value="${jogl.dir}${file.separator}jogl_linux">
+		<isset property="isLinux32" />
+	</condition>
+
+	<!-- setting jogl lib path for linux 32 bit os -->
+	<condition property="jogl.lib.path" value="${jogl.dir}${file.separator}jogl_linux">
+		<isset property="isLinux32" />
+	</condition>	
+	
+			
+    <!-- Base classpath for compilation -->
+    <path id="classpath.base">
+		<!--<fileset dir="${lib.dir}" includes="**/*.jar" />-->				<!-- commented by Narendra Kumar -->
+		<pathelement location="${lib.dir}" />
+		<!--<fileset file="${lib.dir}/AntelopeTasks_3.2.10.jar" />-->		<!-- the jar file is present in lib/common directory -->
+    	
+    	<!-- added by Narendra Kumar -->
+		<fileset dir="${lib.dir}/viz" includes="**/*.jar" />				<!-- include all jar files in lib/viz directory -->
+    	<fileset dir="${lib.dir}/client" includes="**/*.jar" />				<!-- include all jar files in lib/client directory -->
+		<fileset dir="${lib.dir}/common" includes="**/*.jar" />				<!-- include all jar files in lib/common directory -->
+    	<fileset dir="${lib.dir}/help" includes="**/*.jar" />				<!-- include all jar files in lib/help directory -->
+    	<fileset dir="${lib.dir}/service" includes="**/*.jar" />			<!-- include all jar files in lib/service directory -->
+    	<fileset dir="${jogl.jar.path}" includes="**/*.jar" />				<!-- include all jar files in lib/jogl/jogl_${os} directory -->    
+        <fileset dir="${lib.dir}/karnak" includes="**/*.jar" />
+
+    	<!--<fileset dir="${lib.dir}/xmlrpc" includes="**/*.jar" />-->
+    	<!--<fileset dir="${lib.dir}/XBaya" includes="**/*.jar" />-->
+    </path>
+
+	
+    <!-- Base classpath for execution -->    
+    <path id="classpath.run">
+	    <!--fileset dir="${lib.dir}" includes="client/commons-cli-2.0.jar" />
+    	<fileset dir="${lib.dir}" includes="client/gms-ws.jar" />
+    	<fileset dir="${lib.dir}" includes="client/GAT.jar" />
+    	<fileset dir="${lib.dir}" includes="client/GridFTPFileAdaptor.jar" />
+    	<fileset dir="${lib.dir}" includes="client/rsslib4j-0.2.jar" />
+    	<fileset dir="${lib.dir}" includes="common/gms-xstream-1.1.3.jar" />
+    	<fileset dir="${lib.dir}" includes="common/log4j-1.2.8.jar" /-->
+    	<!--<fileset dir="${lib.dir}" includes="**/*.jar"/>-->				<!-- commented by Narendra Kumar -->
+    	
+    	<!-- added by Narendra Kumar -->
+		<fileset dir="${lib.dir}/viz" includes="**/*.jar" />				<!-- include all jar files in lib/viz directory -->
+    	<fileset dir="${lib.dir}/client" includes="**/*.jar" />				<!-- include all jar files in lib/client directory -->
+		<fileset dir="${lib.dir}/common" includes="**/*.jar" />				<!-- include all jar files in lib/common directory -->
+    	<fileset dir="${lib.dir}/help" includes="**/*.jar" />				<!-- include all jar files in lib/help directory -->
+    	<fileset dir="${lib.dir}/service" includes="**/*.jar" />			<!-- include all jar files in lib/service directory -->    	
+    	<fileset dir="${jogl.jar.path}" includes="**/*.jar" />					<!-- include all jar files in lib/jogl/jogl_windows directory -->
+        <fileset dir="${lib.dir}/karnak" includes="**/*.jar" />
+    	
+	    <pathelement location="${build.dir}" />
+	    <!--fileset file="${lib.dir}/AntelopeTasks_3.2.10.jar" /-->
+		<!--fileset dir="${lib.dir}/viz" includes="**/*.jar" /-->
+	    <!--fileset dir="${lib.dir}/client" includes="**/*.jar" /-->
+		<!--fileset dir="${lib.dir}/common" includes="**/*.jar" /-->
+    	<!--<fileset dir="${lib.dir}/xmlrpc" includes="**/*.jar" />-->
+	</path>
+
+    <!-- Base classpath for compilation -->
+    <property name="jar.classpath" refid="classpath.base" />
+
+<!-- *******************************************
+     *        Imported Ant Tasks               *
+     ******************************************* -->
+
+    <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
+	<classpath refid="classpath.base" />
+    </taskdef>
+	
+    <taskdef name="junitreport" 
+	classname="org.apache.tools.ant.taskdefs.optional.junit.XMLResultAggregator"
+	classpathref="classpath.base"/>
+	
+    <taskdef name="if" 
+	classname="ise.antelope.tasks.IfTask"
+	classpathref="classpath.base"/>
+	
+<!-- *******************************************
+     *        Supporting Routines              *
+     ******************************************* -->
+
+    <target name="init" description="Creating GridChem build structure">
+      <!-- Create the time stamp -->
+      <tstamp />
+
+      <!-- Create build directory structure -->
+      <mkdir dir="${build.dir}" />
+      <mkdir dir="${log.dir}" />
+    </target>
+
+    <!-- Create lib directory if not already present -->
+    <target name="initjar" description="Creating GridChem distribution structure">
+      <mkdir dir="${jar.dir}" />
+      <zip destfile="${build.dir}/etc/templates.zip"
+           basedir="${data.dir}/templates"
+      />
+      <zip destfile="${build.dir}/etc/images.zip"
+           basedir="${data.dir}/images"
+      />
+      <zip destfile="${build.dir}/etc/certificates.zip"
+           basedir="${data.dir}/certificates"
+      />
+      <copy todir="${build.dir}/etc">
+          <fileset dir="${data.dir}">
+            <exclude name="**/templates/**"/>
+            <exclude name="**/images/**"/>
+            <exclude name="**/certificates/**"/>
+          </fileset>
+      </copy>
+    </target>
+
+    <!-- Create webstart directory if not already present -->
+    <target name="initwebstart" description="Creating GridChem local webstart structure">
+		<delete failonerror="false" includeEmptyDirs="true">
+			<fileset dir="${webstart.dir}"/>
+        </delete>
+    	<mkdir dir="${webstart.dir}/externallysigned/cog"/>
+    	<mkdir dir="${webstart.dir}/externallysigned/globus"/>
+    	<mkdir dir="${webstart.dir}/externallysigned/jmol"/>
+    	<mkdir dir="${webstart.dir}/externallysigned/jogl"/>
+    </target>
+
+    <!-- Copy all class files to library directory -->    
+    <target name="copy-resources" depends="init" description="Copying files to target directory">
+        <copy todir="${build.dir}">
+          <fileset dir="${source.dir}">
+              <exclude name="**/*.java"/>
+              <exclude name="**/lib/"/>
+          </fileset>
+        </copy>
+    </target>
+
+    <!-- Copy all jar and jnlp files to library directory -->
+    <target name="copywebstart" depends="jar,initwebstart" description="Copying webstart files to webstart directory">
+        <copy todir="${webstart.dir}/ccgsigned" flatten="true">
+            <fileset dir="${lib.dir}">
+                <include name="**/*.jar"/>
+            	<exclude name="jogl/*.jar"/>
+              	<exclude name="ant-optional-1.5.3.jar"/>
+<!--           		<exclude name="AntelopeTasks_3.2.10.jar"/>-->
+                <exclude name="globus/wsrf_provider_jce.jar"/>
+            	<exclude name="globus/xalan-2.6.0.jar"/>
+            	<exclude name="globus/JMolEditor.jar"/>
+            </fileset>
+        	<fileset file="${jar.dir}/${jar.name}"/>
+        </copy>
+<!--        <copy todir="${webstart.dir}/externallysigned/globus">
+            <fileset file="${lib.dir}/globus/wsrf_provider_jce.jar"/>
+        </copy>	-->
+<!--        <copy todir="${webstart.dir}/externallysigned/cog">
+            <fileset file="${lib.dir}/gat/external/jce-jdk13-120.jar"/>
+        </copy>  -->  	
+    	<copy todir="${webstart.dir}/externallysigned/jogl">
+    	     <fileset file="${lib.dir}/jogl/*.jar"/>
+        </copy>    	
+    	<copy todir="${webstart.dir}/externallysigned/jmol">
+    	     <fileset file="${lib.dir}/JMolEditor.jar"/>
+        </copy>    	
+    </target>
+
+<!-- *******************************************
+     *        Public Target Declarations       *
+     ******************************************* -->
+
+    <!-- Build source files and copy them to the library directory -->
+    <target name="build" depends="init" description="Compiling GridChem software">
+        <javac srcdir="${source.dir}"
+               source="1.5"
+               debug="on"
+               destdir="${build.dir}"
+               verbose="off"
+        	   includeantruntime="false">
+               <classpath refid="classpath.base" />
+        </javac>
+    </target>
+
+    <!-- Remove all class files from library directory -->
+    <target name="clean" description="Cleaning target directory">
+        <echo message="Deleting dist files in ${build.dir}"/>
+    	<delete includeEmptyDirs="true">
+			<fileset dir="${build.dir}">
+	                	<!--<exclude name="**/*jar*"/>-->
+	                	<exclude name="**/gat*"/>
+				<exclude name="**/webservice*"/>
+			</fileset>
+        </delete>
+	<delete includeEmptyDirs="true" dir="${build.dir}/org"/>
+    </target>
+
+	<!-- Delete old build and rebuild the client from scratch -->
+	<target name="rebuild" depends="clean,build" description="Rebuilding GridChem from scratch">
+        	<echo message="Rebuilding GridChem client from scratch"/>
+    </target>
+	
+    <!-- Create executable jar of GridChem client and
+         move it to the bin directory -->
+    <target name="jar" depends="build,copy-resources,initjar" >
+    	<!-- create the manifest file -->
+        <jar jarfile="${jar.dir}/${jar.name}">
+                <fileset dir="${build.dir}">
+                        <exclude name="**/client/*.jar"/>
+                        <exclude name="**/common/*.jar"/>
+                        <exclude name="**/xmlrpc/*.jar"/>
+                		<exclude name="**/help/*.jar"/>
+                		<exclude name="**/*.jar"/>
+                        <exclude name="**/jogl/*.jar"/>
+                        <exclude name="**/viz/*.jar"/>
+                        <exclude name="**/*.jar"/>
+                </fileset>
+        	    <fileset file="client-config.wsdd"/>
+                <!-- Create the GridChem jar file -->
+                <manifest>
+                        <attribute name="Main-Class" value="org.gridchem.client.GridChem" />
+                        <!--attribute name="Class-Path" value="${jar.classpath}" /-->
+                        <section name="GridChem">
+                                <attribute name="Sealed" value="false"/>
+                                <attribute name="Built-By" value="${user.name}"/>
+                                <attribute name="Version" value="0.5 ${TODAY}"/>
+                        </section>
+                </manifest>
+        </jar>
+        <signjar jar="${jar.dir}/${jar.name}" storetype="pkcs12"
+                 alias="xxxxxxxxxxxxx" storepass="xxxxxxxxxxx" keystore="${data.dir}/xxxxxxxxxxxxxxxxxxxxxxxx"
+                 tsaurl="http://timestamp.digicert.com"/>
+
+        <!-- <signjar jar="/Users/fanye/Documents/workspace/GridChem/GridChem/lib/service/FileTransferService.jar" alias="CCG" storepass="g2r0i0d5chem" keypass="gc4@ll" keystore="${data.dir}/keystore"/> -->
+    	<!-- The following is an alphabeticlist of jars in the lib directory minus some that went into externally signed -->
+    	<!-- if a new jar is added please update this list and sign that jar using the same certificate in keystore -->
+    	
+     	<!--signjar jar="${lib.dir}/AntelopeTasks_3.2.10.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/ant-optional-1.5.3.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/castor-0.9.6.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/castor-0.9.6-xml.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/cog-axis.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/cog-tomcat.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/colobus.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/commons-discovery.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/commons-logging.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/cryptix32.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/cryptix-asn1.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/cryptix.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/j2ssh-core-0.2.7-rob.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/j2ssh-core.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/jaxrpc.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/jboss-j2ee.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/jdbc-se2.0.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/jdom.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/jgss.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/jsch-0.1.25.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/jsch-20050309.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/jta1.0.1.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/junit.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/jzlib-1.0.5.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/log4j-1.2.8.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/log4j-core.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/ogsa.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/ogsa-samples.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/puretls.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/saaj.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/servlet.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/wsif.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/xalan.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/xercesImpl.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/xmlParserAPIs.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/external/xmlsec.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/GAT.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/gat/GridFTPFileAdaptor.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/addressing-1.0.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/axis.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/axis-url.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/bootstrap.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/cog-jglobus.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/cog-url.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/commonj.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/commons-cli-2.0.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/commons-collections-2.1.1.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/commons-collections-3.0.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/commons-digester.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/commons-lang-1.0.1.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/commons-logging-1.0.4.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/dom4j-1.4.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/globus_usage_core.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/globus_usage_packets_common.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/globus_wsrf_tools_test.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus_gms.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus_gms_stubs.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/gram-stubs.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/jaas.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/jaxrpc.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/junit-3.8.1.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/log4j-1.2.8.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/log4j-core.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/opensaml.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/proxool-0.8.3.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/wsdl4j.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/wsrf_common.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/wsrf_core.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/wsrf_core_stubs.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/wsrf_mds_index_stubs.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/wsrf_tools.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/wss4j.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/xalan-2.6.0.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/xerces-2.4.0.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/globus/xml-apis.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/help/help-4_2-ehelp-integration.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/help/help4-indexer.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/help/help4.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/help/help4-nls.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/help/help4-viewer.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/help/help4-wizard.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/help/ohj-jewt.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/help/ohw-2.0.11.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/help/oracle_ice.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/hibernate3.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/jnlp.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/rsslib4j-0.2.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/vecmath.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/viz/jcommon-1.0.8.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/viz/jfreechart-1.0.4.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+    	<signjar jar="${lib.dir}/xstream-1.1.3.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/-->
+        	
+         
+    	                   	
+    	<!-- ignore these build jars -->
+    	<!--signjar jar="${lib.dir}/ant-optional-1.5.3.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/-->
+<!--    	<signjar jar="${lib.dir}/common/AntelopeTasks_3.2.10.jar" alias="CCG" storepass="g2r0i0d5chem" keypass="gc4@ll" keystore="${data.dir}/keystore"/>-->
+        
+    	<!-- ignore this next jar as well -->
+        <!--signjar jar="${lib.dir}/help/help4-demo.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/-->
+        
+   		<!-- ignore these externally signed jars -->
+        <!--signjar jar="${lib.dir}/gat/external/castor-0.9.6.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/cog-axis.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/cog-tomcat.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/colobus.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/cryptix-asn1.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/cryptix.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/cryptix32.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/j2ssh-core.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/jaxrpc.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/jboss-j2ee.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/jce-jdk13-120.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/jdbc-se2.0.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/puretls.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/wsif.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/jgss.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/jsch-20050309.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/jta1.0.1.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/junit.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/jzlib-1.0.5.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/log4j-1.2.8.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/log4j-core.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/ogsa-samples.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/ogsa.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/servlet.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/wsdl4j.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/xmlParserAPIs.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+        <signjar jar="${lib.dir}/gat/external/xmlsec.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+		<signjar jar="${lib.dir}/JMolEditor.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/>
+		<signjar jar="${lib.dir}/jogl/vecmath.jar" alias="CCG" storepass="g2r0i0d5chem" keystore="${data.dir}/keystore"/ -->		
+    
+    </target>
+
+    <!-- Compile and run the GridChem client using the args from the parameter file -->
+    <target name="run" depends="build,copy-resources" description="Staring GridChem software">
+		<if name="web.service.flag" value="true">
+			<!-- Run the client with the production infrastructure. -->
+	        <echo message="Running GridChem with the production infrastructure."/>
+			<java classname="${run.class}"
+        			fork="true">
+    			<classpath refid="classpath.run" />
+    			<arg value="-w"/>
+                        <arg value="-v 2.0.0"/>
+				<jvmarg value="-Xmx1024m"/>
+				<jvmarg value="-Djava.library.path=${java.library.path}${path.separator}${basedir}${file.separator}src${file.separator}Gamess${file.separator}bin"/>
+        	</java>
+		<else>
+			<if name="devel.flag" value="true">
+				<!-- Run the client with the development infrastructure.-->
+				<echo message="Running GridChem with the development infrastructure."/>
+				<java classname="${run.class}"
+						fork="true">
+					<classpath refid="classpath.run" />
+					<arg value="-d"/>
+					<jvmarg value="-Xmx256m"/>
+					<jvmarg value="-Djava.library.path=${java.library.path}${path.separator}${basedir}${file.separator}src${file.separator}Gamess${file.separator}bin"/>
+		        </java>	
+			<else>
+				<if name="failover.flag" value="true">
+					<!-- Run the client with the failover infrastructure. -->
+					<echo message="Running GridChem with the failover infrastructure."/>
+					<java classname="${run.class}"
+							fork="true">
+						<classpath refid="classpath.run" />
+						<arg value="-f"/>
+						<jvmarg value="-Xmx256m"/>
+						<jvmarg value="-Djava.library.path=${java.library.path}${path.separator}${basedir}${file.separator}src${file.separator}Gamess${file.separator}bin"/>
+		        	</java>
+				<else>
+					<if name="local.flag" value="true">
+						<!-- Run the client with the local infrastructure. -->
+						<echo message="Running GridChem with the local infrastructure."/>
+						<java classname="${run.class}"
+			    				fork="true">
+		    				<classpath refid="classpath.run" />
+		    				<arg value="-l"/>
+							<jvmarg value="-Xmx256m"/>
+							<jvmarg value="-Djava.library.path=${java.library.path}${path.separator}${basedir}${file.separator}src${file.separator}Gamess${file.separator}bin"/>
+			    		</java>
+					<else>
+						<!-- Run the client with the production infrastructure. -->
+						<echo message="Running GridChem with the production infrastructure."/>
+						<java classname="${run.class}"
+								fork="true">
+							<classpath refid="classpath.run" />
+							<jvmarg value="-Xmx256m"/>
+							<jvmarg value="-Djava.library.path=${java.library.path}${path.separator}${basedir}${file.separator}src${file.separator}Gamess${file.separator}bin"/>
+				        </java>
+    				</else>
+    				</if>
+				</else>
+				</if>
+			</else>
+			</if>	
+		</else>
+		</if>	
+    </target>
+
+    <!-- Compile and run the GridChem client in development mode-->
+    <target name="rundevel" depends="build,copy-resources" description="Staring GridChem software">
+        <!-- run the app -->
+    	<echo message="dll path: ${jogl.lib.path}" />
+    	<echo message="arch: ${os.arch}" />
+    	<echo message="${basedir}${file.separator}src${path.separator}${jogl.lib.path}" />
+        <java classname="${run.class}"
+                fork="true">
+                <classpath refid="classpath.run" />
+                <arg value="-d"/>
+        	<!-- java library path modified by Narendra Kumar -->
+        	<!--<jvmarg value="-Djava.library.path=${java.library.path}${path.separator}${basedir}${file.separator}src${file.separator}Gamess${file.separator}bin"/>-->
+        	<jvmarg value="-Djava.library.path=${java.library.path}${path.separator}${basedir}${file.separator}${jogl.lib.path}"/>
+        </java>
+    </target>
+
+    <!-- Compile and run the GridChem client using the -failover flag -->
+    <target name="runfailover" depends="build,copy-resources" description="Staring GridChem software">
+        <!-- run the app -->
+        <java classname="${run.class}"
+                fork="true">
+                <classpath refid="classpath.run" />
+                <arg value="-f"/>
+        </java>
+    </target>
+
+    <!-- Compile and query the information service-->
+    <target name="querymike" depends="build,copy-resources" description="Query Information Service">
+        <!-- run the app -->
+        <java classname="${query.class}"
+                fork="true">
+                <classpath refid="classpath.run" />
+        		   <arg value="resource"/>
+                <arg value="load"/>
+        		   <arg value="mike4.cct.lsu.edu"/>
+        </java>
+    </target>
+	
+	<!-- Compile and query the information service-->
+    <target name="queryjobs" depends="build,copy-resources" description="Query Information Service">
+        <!-- run the app -->
+        <java classname="${query.class}"
+                fork="true">
+                <classpath refid="classpath.run" />
+                <arg value="jobs"/>
+                <arg value="CCG"/>
+        </java>
+    </target>
+
+    <!-- Compile and query the information service-->
+    <target name="querynodes" depends="build,copy-resources" description="Query Information Service">
+        <!-- run the app -->
+        <java classname="${query.class}"
+                fork="true">
+                <classpath refid="classpath.run" />
+                <arg value="nodes"/>
+                <arg value="TACC"/>
+        </java>
+    </target>
+
+    <!-- Compile and query the information service-->
+    <target name="querysummary" depends="build,copy-resources" description="Query Information Service">
+        <!-- run the app -->
+        <java classname="${query.class}"
+                fork="true">
+                <classpath refid="classpath.run" />
+                <arg value="summary"/>
+                <arg value="TACC"/>
+        </java>
+    </target>
+
+    <!-- Build the javadocs for the GridChem client -->
+    <target name="javadoc" description="Generating GridChem Javadocs">
+        <!-- run the app -->
+        <javadoc
+                destdir="docs/Javadoc"
+                author="true"
+                version="true"
+                use="true"
+                verbose="true"
+                windowtitle="GridChem API">
+
+                <fileset dir="src" defaultexcludes="yes">
+                        <!-- include name="com/microstar/xml/**"/ -->
+                </fileset>
+
+                <doctitle><![CDATA[<h1>GridChem 0.1</h1>]]></doctitle>
+                <bottom><![CDATA[<i>Copyright &#169 2004, University of Illinois at Urbana-Champaign.  All rights reserved.</i>]]></bottom>
+                <tag name="todo" scope="all" description="To do:" />
+                <group title="GridChem Client Package" packages="org.gridchem.client"/>
+                <group title="Gaussian03 Editor Package" packages="G03Input"/>
+                <group title="Nanocad Molecular Editor Package" packages="nanocad*"/>
+                <group title="XML Parsing Package" packages="com.microstar.*"/>
+                <group title="Java Cup Parsing Package" packages="java_cup*"/>
+                <group title="JFlex Parsing Package" packages="JFlex*"/>
+                <!-- link offline="false" href="http://java.sun.com/products/jdk/1.4/docs/api/" packagelistLoc="C:\tmp"/ -->
+                <link href="https://www.gridchem.org/documentation/Javadoc/"/>
+        </javadoc>
+    </target>
+
+    <!-- Setup a webstart directory for local debug testing GridChem -->
+    <target name="runwebstart" depends="copywebstart,createjnlp" description="Run client as local webstart application">
+        <echo message="running webstart locally on os = ${os.name}"/>
+		<apply executable="javaws"
+			outputproperty="${log.dir}/webstart.out"
+			errorproperty="${log.dir}/webstart.err">
+		<fileset file="${webstart.dir}/gridchem.jnlp"/>                
+	</apply>
+    </target>
+
+    <target name="createjnlp" description="Create jnlp file for local webstart run">
+
+    	<!-- create main gridchem jnlp -->
+    	<delete file="${webstart.dir}/gridchem.jnlp"/>
+	    
+    	<touch file="${webstart.dir}/gridchem.jnlp"/>
+
+	<!-- add common jnlp header -->		
+    	<concat destfile="${webstart.dir}/gridchem.jnlp"
+	        	append="true">
+            <fileset file="${data.dir}/all_jnlp_header.txt"/>
+		</concat>
+
+        <!-- add local jnlp file name so we can run locally-->		
+    	<echo file="${webstart.dir}/gridchem.jnlp"
+				append="true" 
+				message="file:///${webstart.dir}"/>
+
+        <!-- add main prefix -->
+        <concat destfile="${webstart.dir}/gridchem.jnlp"
+                        append="true">
+            <fileset file="${data.dir}/main_jnlp_prefix.txt"/>
+        </concat>	
+
+        <!-- add gridchem jar file name -->
+        <echoxml file="${webstart.dir}/gridchem.jnlp"
+                append="true">
+             <jar href="ccgsigned/${jar.name}" download="eager"/>
+		</echoxml>
+        
+        <!-- add remaining main jnlp body -->
+    	<concat destfile="${webstart.dir}/gridchem.jnlp"
+                append="true">
+            <fileset file="${data.dir}/main_jnlp_body.txt"/>
+        </concat>		
+	 
+    	<!-- create gridchem cog jnlp -->
+		<delete file="${webstart.dir}/externallysigned/cog/gridchem.cog.jnlp"/>
+        
+    	<touch file="${webstart.dir}/externallysigned/cog/gridchem.cog.jnlp"/>
+        
+    	<concat destfile="${webstart.dir}/externallysigned/cog/gridchem.cog.jnlp"
+                append="true">
+            <fileset file="${data.dir}/all_jnlp_header.txt"/>
+        </concat>
+        
+    	<echo file="${webstart.dir}/externallysigned/cog/gridchem.cog.jnlp"
+                append="true" 
+                message="file:///${webstart.dir}/externallysigned/cog"/>
+        
+    	<concat destfile="${webstart.dir}/externallysigned/cog/gridchem.cog.jnlp"
+                append="true">
+            <fileset file="${data.dir}/cog_jnlp_body.txt"/>
+        </concat>
+    	
+    	<!-- create gridchem globus jnlp -->
+		<delete file="${webstart.dir}/externallysigned/globus/gridchem.gat.jnlp"/>
+        
+    	<touch file="${webstart.dir}/externallysigned/globus/gridchem.globus.jnlp"/>
+        
+    	<concat destfile="${webstart.dir}/externallysigned/globus/gridchem.globus.jnlp"
+                append="true">
+            <fileset file="${data.dir}/all_jnlp_header.txt"/>
+        </concat>
+        
+    	<echo file="${webstart.dir}/externallysigned/globus/gridchem.globus.jnlp"
+                append="true" 
+                message="file:///${webstart.dir}/externallysigned/globus"/>
+        
+    	<concat destfile="${webstart.dir}/externallysigned/globus/gridchem.globus.jnlp"
+                append="true">
+            <fileset file="${data.dir}/globus_jnlp_body.txt"/>
+        </concat>
+    	
+    	<!-- create gamess jogl jnlp -->
+    	<delete file="${webstart.dir}/externallysigned/jogl/jogl.jnlp"/>
+    	<touch file="${webstart.dir}/externallysigned/jogl/jogl.jnlp"/>
+		
+    	<concat destfile="${webstart.dir}/externallysigned/jogl/jogl.jnlp" append="true">
+			<fileset file="${data.dir}/all_jnlp_header.txt"/>
+		</concat>
+
+    	<echo file="${webstart.dir}/externallysigned/jogl/jogl.jnlp" append="true" message="file:///${webstart.dir}/externallysigned/jogl"/>
+
+		<concat destfile="${webstart.dir}/externallysigned/jogl/jogl.jnlp" append="true">
+			<fileset file="${data.dir}/jogl_jnlp_body.txt"/>
+		</concat>
+    	
+    	<!-- create jmol jnlp -->
+    	<delete file="${webstart.dir}/externallysigned/jmol/jmol.jnlp"/>
+    	<touch file="${webstart.dir}/externallysigned/jmol/jmol.jnlp"/>
+		
+    	<concat destfile="${webstart.dir}/externallysigned/jmol/jmol.jnlp" append="true">
+			<fileset file="${data.dir}/all_jnlp_header.txt"/>
+		</concat>
+
+    	<echo file="${webstart.dir}/externallysigned/jmol/jmol.jnlp" append="true" message="file:///${webstart.dir}/externallysigned/jmol"/>
+
+		<concat destfile="${webstart.dir}/externallysigned/jmol/jmol.jnlp" append="true">
+			<fileset file="${data.dir}/jmol_jnlp_body.txt"/>
+		</concat>
+    	
+    </target>
+	
+	<!-- Run the junit test suite for the GridChem client -->
+	<target name="junit" depends="build" description="Run the test suite">
+		<echo message="Running GridChem client test suite"/>
+		<property environment="env"/>
+		<mkdir dir="${test.out.dir}"/>
+		<junit printsummary="yes" fork="yes" haltonfailure="yes" showoutput="true">
+			<classpath refid="classpath.run" />
+			<formatter type="plain"/>
+			<formatter type="xml"/>
+			<test name="org.gridchem.client.test.AllTests" todir="${test.out.dir}" haltonfailure="no"/>
+		</junit>
+	</target>
+
+	<!-- Generate junit reports for the test results -->
+	<target name="junitreport" depends="junit" description="Run tests and create JUnit report">
+		<echo message="Generating junit reports from test suites"/>
+		<junitreport todir="${test.out.dir}">
+			<fileset dir="${test.out.dir}">
+				<include name="TEST-*.xml"/>
+			</fileset>
+			<report format="frames" todir="${test.out.dir}"/>
+		</junitreport>
+	</target>
+
+    <!-- Compile and run the CCG RSS reader client -->
+    <target name="readRSS" depends="build,copy-resources" description="Staring CCG RSS Reader">
+        <!-- run the app -->
+        <java classname="org.gridchem.client.gui.panels.RSSViewer"
+                fork="true">
+                <classpath refid="classpath.run" />
+		<arg value="http://www.gridchem.org:8668/exec/rss"/>
+        </java>
+    </target>                
+
+	<!-- Compile and run the CCG RSS reader client -->
+    <target name="browseMSS" depends="build,copy-resources" description="Staring CCG File Browser Reader">
+        <!-- run the app -->
+        <java classname="org.gridchem.client.gui.filebrowser.FileBrowserTest"
+                fork="true">
+                <classpath refid="classpath.run" />
+        </java>
+    </target>  
+
+ <!-- Compile and run the CCG VO monitoring panel -->
+    <target name="monitorVO" depends="build,copy-resources" description="Staring GridChem software">
+        <!-- run the app -->
+        <java classname="org.gridchem.client.gui.panels.myccg.MonitorVO"
+                fork="true">
+                <classpath refid="classpath.run" />
+                <arg value="-devel"/>
+        </java>
+    </target>
+                        
+ <!-- Run the metadata editor demo-->
+    <target name="viewMetadata" depends="build,copy-resources" description="Starting metadata editor">
+        <!-- run the app -->
+        <java classname="org.gridchem.client.gui.metadataeditor.MetaDataEditor"
+                fork="true">
+                <classpath refid="classpath.run" />
+        </java>
+    </target>
+	
+ <!-- Run the metadata editor demo-->
+    <target name="viewSearchDialog" depends="build,copy-resources" description="Starting metadata editor">
+        <!-- run the app -->
+        <java classname="org.gridchem.client.gui.panels.SearchDialog"
+                fork="true">
+                <classpath refid="classpath.run" />
+        </java>
+    </target>
+	<!-- Run the project selection demo-->
+    <target name="viewProjectSelection" depends="build,copy-resources" description="Starting metadata editor">
+        <!-- run the app -->
+        <java classname="org.gridchem.client.authentication.ProjectSelectionDialog"
+                fork="true">
+                <classpath refid="classpath.run" />
+        </java>
+    </target>
+	
+	
+	<!-- Run the project selection demo-->
+	    <target name="viewJobPanel" depends="build,copy-resources" description="Starting metadata editor">
+	        <!-- run the app -->
+	        <java classname="org.gridchem.client.gui.jobmanager.JobPanel"
+	                fork="true">
+	                <classpath refid="classpath.run" />
+	        </java>
+	    </target>
+	
+	<!-- Run the resource monitoring demo-->
+	    <target name="resourceMonitorTree" depends="build,copy-resources" description="Starting metadata editor">
+	        <!-- run the app -->
+	        <java classname="org.gridchem.client.gui.panels.myccg.resource.ResourcePanel"
+	                fork="true">
+	                <classpath refid="classpath.run" />
+	        </java>
+	    </target>
+	
+	<!-- Run the usage monitoring demo-->
+	    <target name="usageMonitorTree" depends="build,copy-resources" description="Starting metadata editor">
+	        <!-- run the app -->
+	        <java classname="org.gridchem.client.gui.panels.myccg.project.UsagePanel"
+	                fork="true">
+	                <classpath refid="classpath.run" />
+	        </java>
+	    </target>
+	
+	<!-- Run the usage monitoring demo-->
+	    <target name="viewSteeringPanel" depends="build,copy-resources" description="Starting metadata editor">
+	        <!-- run the app -->
+	        <java classname="org.gridchem.client.gui.panels.myccg.job.steering.JobSteeringDialog"
+	                fork="true">
+	                <classpath refid="classpath.run" />
+	        </java>
+	    </target>
+	
+	<!-- Macro to remove a existing jar signature - added by suresh on 10/29/2014 -->
+	<macrodef name="unsignjar">
+		<attribute name="jarFile" />
+		<sequential>
+			<jar update="yes"
+				jarfile="@{jarFile}.tmp">
+				<zipfileset src="@{jarFile}">
+					<include name="**"/>
+					<exclude name="META-INF/*.SF"/>
+					<exclude name="META-INF/*.DSA"/>
+					<exclude name="META-INF/*.RSA"/>
+				</zipfileset>
+			</jar>
+			<move file="@{jarFile}.tmp"
+				tofile="@{jarFile}"
+				overwrite="true" />
+		</sequential>
+	</macrodef>
+	<target name="unsignjars">
+		<unsignjar jarFile="lib/used-in-jnlp/GMS-client.jar" />
+		<unsignjar jarFile="lib/used-in-jnlp/help-4_2-ehelp-integration.jar" />
+		<unsignjar jarFile="lib/used-in-jnlp/help4-indexer.jar" />
+		<unsignjar jarFile="lib/used-in-jnlp/help4-nls.jar" />
+		<unsignjar jarFile="lib/used-in-jnlp/help4-viewer.jar" />
+		<unsignjar jarFile="lib/used-in-jnlp/help4-wizard.jar" />
+		<unsignjar jarFile="lib/used-in-jnlp/help4.jar" />
+		<unsignjar jarFile="lib/used-in-jnlp/jcommon-1.0.8.jar" />
+		<unsignjar jarFile="lib/used-in-jnlp/jfreechart-1.0.4.jar" />
+		<unsignjar jarFile="lib/used-in-jnlp/jnlp.jar" />
+		<unsignjar jarFile="lib/used-in-jnlp/ohj-jewt.jar" />
+		<unsignjar jarFile="lib/used-in-jnlp/ohw-2.0.11.jar" />
+		<unsignjar jarFile="lib/used-in-jnlp/oracle_ice.jar" />
+		<unsignjar jarFile="lib/used-in-jnlp/progressdialog.jar" />
+		<unsignjar jarFile="lib/used-in-jnlp/rsslib4j-0.2.jar" />
+		<unsignjar jarFile="lib/used-in-jnlp/vecmath.jar" />
+		<unsignjar jarFile="lib/used-in-jnlp/wsdl4j.jar" />
+		<unsignjar jarFile="lib/used-in-jnlp/xstream-1.1.3.jar" />
+	</target>
+	
+	
+	<!-- Target to create jnlp ready to be deployed - added by suresh on 10/28/2014 -->
+	<target name="signjars" description="Sign Jars">
+		
+		<signjar destDir="jnlp/lib" storetype="pkcs12"
+			alias="*************" keystore="${data.dir}/************************"
+			storepass="***********"
+			preservelastmodified="true"
+			tsaurl="http://timestamp.digicert.com">
+			<path>
+				<fileset dir="lib/used-in-jnlp" includes="**/*.jar" />
+			</path>
+<!--			<fileset file="lib/used-in-jnlp/progressdialog.jar"/>-->
+			<flattenmapper />
+		</signjar>	
+	</target>
+	
+	<target name="bundlejnlp" depends="clean,jar,signjars" description="Bundle JNLP">
+		<delete failonerror="false" includeEmptyDirs="true">
+			<fileset dir="jnlp/lib"/>
+		</delete>
+		<mkdir dir="jnlp/lib"/>
+		<copy todir="jnlp/lib" flatten="true">
+			<fileset file="${jar.dir}/${jar.name}"/>
+		</copy>
+		
+	</target>
+	
+</project>

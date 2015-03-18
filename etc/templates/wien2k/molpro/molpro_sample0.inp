@@ -1,0 +1,67 @@
+***, Allene geometry optimization
+memory,1,m
+
+basis=sto-3g
+ierr=0
+
+text,optimized values:
+e_old=[-114.42171910,-114.42171910,-114.42171910,-114.42171910,-114.42171910,-114.42171910]
+step_old=[5,5,5,5,5,5]
+
+bmat=['  ','BMAT']
+optm=['RF','AH','DIIS']
+
+i=0
+do ibmat=1,#bmat
+do imeth=1,#optm
+clear,x*,y*,z*
+i=i+1
+
+text,start geometry
+rcc=1.32 ang
+rch=1.08 ang
+acc=120 degree
+
+Geometry={C1;
+         C2,c1,rcc
+          Q1,c1,rcc,c2,45
+          C3,c2,rcc,c1,180,q1,0
+          h1,c1,rch,c2,acc,q1,0
+          h2,c1,rch,c2,acc,h1,180
+          h3,c3,rch,c2,acc,h1,90
+          h4,c3,rch,c2,acc,h2,90}
+
+int
+hf;
+optg,grad=1.d-4
+coord,$bmat(ibmat)
+method,$optm(imeth);
+method(i)='$optm(imeth) $bmat(ibmat)'
+e1(i)=energy
+rcc_opt(i)=rcc
+rch_opt(i)=rch
+acc_opt(i)=acc
+
+steps(i)=optstep
+de(i)=abs(e1(i)-e_old(i))
+if(de(i).gt.1.d-7.or.steps(i).gt.step_old(i)) ierr=1
+
+enddo
+enddo
+
+demax=max(de)
+
+if(ierr.eq.0) then
+table,method,e1,rcc_opt,rch_opt,acc_opt,steps
+save,test.log
+title,Results for job allene_opt.test
+title,No errors detected. Max error: de=$demax
+
+else
+
+table,method,e1,e_old,de,rcc_opt,rch_opt,acc_opt,steps,step_old
+save,test.log
+title,Results for job allene_opt.test
+title,ERRORS DETECTED. Max error: de=$demax
+endif
+

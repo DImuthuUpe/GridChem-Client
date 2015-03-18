@@ -1,0 +1,10 @@
+# This policy file dictates the following policy:
+#   -The DFN-PCA Root CA can sign any certificates in Germany
+#    (C=DE)
+access_id_CA      X509	'/C=DE/O=Deutsches Forschungsnetz/OU=DFN-CERT GmbH/OU=DFN-PCA/CN=DFN Toplevel Certification Authority/Email=certify@pca.dfn.de'
+ pos_rights        globus        CA:sign
+
+ cond_subjects     globus     '"/C=DE/*"'
+
+# end of EACL
+#

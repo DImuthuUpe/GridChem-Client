@@ -1,0 +1,81 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 6 (0x6)
+        Signature Algorithm: sha1WithRSAEncryption
+        Issuer: C=US, ST=Virginia, L=Charlottesville, O=NMI Testbed Grid, OU=Bridge CA, CN=BridgeCA
+        Validity
+            Not Before: Aug 25 05:04:13 2004 GMT
+            Not After : Aug 23 05:04:13 2014 GMT
+        Subject: C=US, ST=Virginia, L=Charlottesville, O=University of Virginia/emailAddress=pkimaster@virginia.edu, CN=UVA Standard Assurance SKP 1
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+            RSA Public Key: (1024 bit)
+                Modulus (1024 bit):
+                    00:d9:06:36:f7:0a:7f:39:a8:b7:00:29:0f:d5:48:
+                    45:3b:b7:08:ce:34:22:a5:02:97:32:e2:9c:ba:de:
+                    31:7b:f4:8e:db:21:be:2b:e5:4f:33:88:d6:fa:f4:
+                    48:89:0a:d7:13:eb:a2:76:e7:43:ef:8a:d6:4f:4b:
+                    e1:0c:8a:b0:ef:f5:e2:57:cd:40:05:17:c8:c4:9d:
+                    cc:38:6e:4c:15:85:fa:45:60:4b:33:6d:ff:69:fd:
+                    4e:db:42:1e:0f:3a:85:25:20:67:33:b8:e7:1e:2c:
+                    5b:27:a2:f5:47:a6:5c:76:42:d2:42:af:a1:57:c3:
+                    ca:64:95:3b:70:f1:7b:3f:cd
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: critical
+            CA:TRUE
+            Authority Information Access: 
+            CA Issuers - URI:http://www.pki.Virginia.EDU/testbed-bridge/uva-xcerts.p7b
+
+            X509v3 Key Usage: 
+            Certificate Sign, CRL Sign
+            X509v3 CRL Distribution Points: 
+            URI:http://www.pki.Virginia.EDU/testbed-bridge/bridge.crl
+
+            X509v3 Subject Key Identifier: 
+            2C:B7:E3:A6:09:68:85:90:58:8E:2D:D5:3A:EF:93:02:2A:4C:85:62
+            X509v3 Authority Key Identifier: 
+            keyid:9C:49:E6:F9:6C:09:30:FC:31:71:23:15:E1:C9:57:5B:31:D2:AF:BD
+
+    Signature Algorithm: sha1WithRSAEncryption
+        64:65:06:f3:9b:93:cd:5f:b4:1f:bd:8d:58:2b:d4:ec:8e:99:
+        43:2c:9c:b2:70:42:1f:42:1c:de:7d:33:2e:a8:36:2c:01:95:
+        d7:85:02:7f:0e:c4:38:e2:a0:9e:b4:74:29:60:76:4b:b1:94:
+        f1:e8:81:4d:ce:05:8c:6b:c1:a3:0d:c0:68:a3:3e:ce:90:ae:
+        d7:04:80:03:64:2a:c7:fa:9c:e0:a9:42:db:2d:b2:76:95:1b:
+        3b:88:a2:c3:bd:cc:f5:fe:09:1e:0b:5e:fd:bc:8c:a7:ec:4e:
+        21:da:78:8d:11:d4:52:b8:ec:43:dc:f5:60:8d:85:e9:0e:ea:
+        e4:0f:cb:9d:d2:ea:eb:02:90:ab:c2:7c:4b:57:0d:41:f8:b1:
+        f2:9b:cc:95:8c:f6:56:25:0f:81:64:03:a4:31:e0:6d:b5:16:
+        4a:d2:e6:3b:ec:c2:c0:82:0e:1b:97:a2:14:83:92:31:5f:90:
+        78:ec:2b:56:93:9f:2a:ec:ca:44:53:c5:f6:d1:96:a0:c6:ce:
+        10:8a:2b:40:e5:e8:98:e3:c2:07:41:07:92:a5:9f:7c:f1:1b:
+        36:46:7b:f7:3c:04:64:e3:c9:db:c2:64:54:84:ad:22:36:8e:
+        8f:33:a3:1e:5a:88:18:d5:23:2a:17:c0:6f:53:ce:54:44:5c:
+        8e:85:9a:bb
+-----BEGIN CERTIFICATE-----
+MIIEHzCCAwegAwIBAgIBBjANBgkqhkiG9w0BAQUFADB8MQswCQYDVQQGEwJVUzER
+MA8GA1UECBMIVmlyZ2luaWExGDAWBgNVBAcTD0NoYXJsb3R0ZXN2aWxsZTEZMBcG
+A1UEChMQTk1JIFRlc3RiZWQgR3JpZDESMBAGA1UECxMJQnJpZGdlIENBMREwDwYD
+VQQDEwhCcmlkZ2VDQTAeFw0wNDA4MjUwNTA0MTNaFw0xNDA4MjMwNTA0MTNaMIGp
+MQswCQYDVQQGEwJVUzERMA8GA1UECBMIVmlyZ2luaWExGDAWBgNVBAcTD0NoYXJs
+b3R0ZXN2aWxsZTEfMB0GA1UEChMWVW5pdmVyc2l0eSBvZiBWaXJnaW5pYTElMCMG
+CSqGSIb3DQEJARYWcGtpbWFzdGVyQHZpcmdpbmlhLmVkdTElMCMGA1UEAxMcVVZB
+IFN0YW5kYXJkIEFzc3VyYW5jZSBTS1AgMTCBnzANBgkqhkiG9w0BAQEFAAOBjQAw
+gYkCgYEA2QY29wp/Oai3ACkP1UhFO7cIzjQipQKXMuKcut4xe/SO2yG+K+VPM4jW
++vRIiQrXE+uidudD74rWT0vhDIqw7/XiV81ABRfIxJ3MOG5MFYX6RWBLM23/af1O
+20IeDzqFJSBnM7jnHixbJ6L1R6ZcdkLSQq+hV8PKZJU7cPF7P80CAwEAAaOCAQAw
+gf0wDwYDVR0TAQH/BAUwAwEB/zBVBggrBgEFBQcBAQRJMEcwRQYIKwYBBQUHMAKG
+OWh0dHA6Ly93d3cucGtpLlZpcmdpbmlhLkVEVS90ZXN0YmVkLWJyaWRnZS91dmEt
+eGNlcnRzLnA3YjALBgNVHQ8EBAMCAQYwRgYDVR0fBD8wPTA7oDmgN4Y1aHR0cDov
+L3d3dy5wa2kuVmlyZ2luaWEuRURVL3Rlc3RiZWQtYnJpZGdlL2JyaWRnZS5jcmww
+HQYDVR0OBBYEFCy346YJaIWQWI4t1TrvkwIqTIViMB8GA1UdIwQYMBaAFJxJ5vls
+CTD8MXEjFeHJV1sx0q+9MA0GCSqGSIb3DQEBBQUAA4IBAQBkZQbzm5PNX7QfvY1Y
+K9TsjplDLJyycEIfQhzefTMuqDYsAZXXhQJ/DsQ44qCetHQpYHZLsZTx6IFNzgWM
+a8GjDcBooz7OkK7XBIADZCrH+pzgqULbLbJ2lRs7iKLDvcz1/gkeC179vIyn7E4h
+2niNEdRSuOxD3PVgjYXpDurkD8ud0urrApCrwnxLVw1B+LHym8yVjPZWJQ+BZAOk
+MeBttRZK0uY77MLAgg4bl6IUg5IxX5B47CtWk58q7MpEU8X20Zagxs4QiitA5eiY
+48IHQQeSpZ988Rs2Rnv3PARk48nbwmRUhK0iNo6PM6MeWogY1SMqF8BvU85URFyO
+hZq7
+-----END CERTIFICATE-----

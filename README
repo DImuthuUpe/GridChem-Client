@@ -1,0 +1,95 @@
+*****************************************************************************************
+*										        *	
+*	                             GridChem                                           *
+*										        * 	
+*			                                                                *	 
+*  Copyright (c) 2004, University of Illinois at Urbana-Champaign. All rights reserved. *
+*										        *
+*  Developed by:								        *	
+*  Chemistry and Computational Biology Group					        *
+*										        *	
+*  NCSA, University of Illinois at Urbana-Champaign				        *	
+*										        *
+*  http://ncsa.uiuc.edu/GridChem                                                 *
+*                                                                                       * 
+*****************************************************************************************
+
+GridChem is a Java application to launch and monitor computational chemistry calculations
+on Computational Chemistry Grid (CCG) supercomputers from remote sites. The GridChem interface 
+allows users to submit and monitor quantum chemistry jobs run on any computer accessable through 
+the CCG community account or on which they have an allocation, without having to log in or to 
+remember the unique features of each system. In future releases, when the CCG has taken full 
+form, we envision making this process even more transparent to the userto the user, but for 
+now we depend on the users to know which machines they are able to access. 
+
+GridChem can submit input text files to Gaussian 98 and GAMESS suites currently. We intend to 
+implement several other quantum chemistry applications such as NWChem, Molpro, Qchem, Aces, etc. 
+in this interface in the future. A molecular editor is integrated into GridChem, and can be used to 
+generate Gaussian input files. In addition, output files can be obtained from the remote hosts and parsed to 
+create graphs and geometries extracted and viewed as molecular models.
+
+GridChem also includes a generic job submission interface which allows users to leverage many
+GridChem features on their own home grown codes. For more information on the SSH interface to
+GridChem, please consult the User's Guide in the 'docs' directory of this checkout.
+
+GridChem relies upon grid and Java technologies to ensure security and guarantee a 'single sign-on'
+approach to computation.  This means that once the user authenticates to GridChem the first time, 
+GridChem will securely act on their behalf for the remainder of the current session. GridChem currently 
+supports three authentication methods: Kerberos, GSI, and Secure Shell.  In the near future, a fourth
+option will be integrated - the GridChem community user. 
+
+1. Architectures:
+   |
+   |--- docs                           Documentation for GridChem client.
+   |
+   |--- lib                            Dependent jar and GridChem class files.
+   |
+   |--- src                            Source files for GridChem.
+       |
+       |--- CUP_FLEX                   CUP/JFlex files for analyzing and
+       |                               parsing output files from applications.
+       |
+       |--- G03Input                   Java files for the Gaussian GUI.
+       |
+       |--- GridChem                   Java files for GridChem.
+       |
+       |--- JFlex                      The Fast Scanner Generator for Java
+       |
+       |--- com
+            |
+            |--- jcraft                Open source SSH-2 Java API from Jcraft.
+            |
+            |--- microstar             Open source XML parser.
+       |
+       |--- doc                        Javadoc files.
+       |
+       |--- java_cup                   JavaCup specification language.
+       |
+       |--- nanocad                    Java files for Nanocad (a molecular
+       |                               editor to create and visualize models).
+       |
+       |--- ncsatools                  OGCE package for trebuchet grid file
+       |                               management.
+
+   |
+   |--- build.xml                      Ant build file for the GridChem client.
+   |                                   See docs/INSTALL for more information
+   |                                   on usage and requirements.
+   |
+   |--- README                         This file.
+
+  	
+
+2. More details on how to use GridChem can be found at http://www.gridchem.org.
+
+3. Installation instructions are provided in the docs/INSTALL file included within this
+   folder.
+
+4. To change the URL of the Middleware server, go to "Invariants.java" and change the 
+   values of string "kerbGateway" and "httpsGateway". You may also need to change 
+   the URLs in cgi scripts.
+
+5. To add a new application, you need to modify "editJobPanel.java" and "SubmitJob.java" and
+   create a cgi script corresponding to this application. You may need to write CUP/Jflex files
+   to analyze and parse the output files from this application.
+ 

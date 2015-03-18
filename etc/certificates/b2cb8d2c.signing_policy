@@ -1,0 +1,5 @@
+# NASA CA Policy (OLD)
+
+access_id_CA   X509    '/O=Grid/O=National Aeronautics and Space Administration/OU=Ames Research Center/CN=Certificate Manager'
+pos_rights     globus  CA:sign
+cond_subjects  globus  '/O=Grid/O=National Aeronautics and Space Administration/*'

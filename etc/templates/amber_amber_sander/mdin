@@ -1,0 +1,23 @@
+ test of pairwise decomposition of PB reaction field energy of residues 9 - 14 of protein raf
+ &cntrl
+  ntf    = 1,       ntb    = 0,
+  igb    = 10,      dielc  = 1.0,
+  cut    = 999.0,   nsnb   = 99999,
+  imin   = 1,       maxcyc = 0,
+  ntmin  = 2,       idecomp= 4,
+ /
+ &pb
+  epsin  = 1.0,     epsout  = 80.0,
+  istrng = 0.00,       radiopt = 0,
+  sprob  = 1.4,     space   = 0.5,
+  maxitn = 500,    dbfopt  = 1,   npopt   = 0,
+  cavity_surften = 0.0072,    cavity_offset   = 0.0,
+  npbverb= 0
+ /
+Residues considered as LIG
+LRES 9 14
+END
+Residues to print
+RES 9 14
+END
+END
